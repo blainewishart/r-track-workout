@@ -1,0 +1,170 @@
+# R-Track-Workout Project Guidelines
+
+## Project Overview
+A React mobile-first workout tracking application with offline-first persistence and component-based architecture.
+
+## Tech Stack Recommendations
+
+### Core Framework
+- **React 18+** with TypeScript for type safety
+- **Vite** for fast development and building
+- **React Router** for navigation
+- **Zustand** for lightweight state management
+
+### UI Component Library
+- **Chakra UI** or **Mantine** - Modern, accessible, mobile-first component libraries
+- **Framer Motion** for smooth animations
+- **React Hook Form** for form handling
+
+### Offline-First Persistence
+- **IndexedDB** via **idb** library for local storage
+- **Dexie.js** as a wrapper for easier IndexedDB usage
+- **React Query** for data synchronization when online
+
+### Mobile-First Development
+- **PWA** capabilities for app-like experience
+- **Service Workers** for offline functionality
+- **Responsive design** with mobile-first CSS approach
+
+## Architecture Guidelines
+
+### Component Structure
+```
+src/
+├── components/
+│   ├── ui/           # Reusable UI components
+│   ├── forms/        # Form components
+│   ├── layout/       # Layout components
+│   └── features/     # Feature-specific components
+├── hooks/            # Custom React hooks
+├── stores/           # Zustand stores
+├── services/         # Data and API services
+├── types/            # TypeScript type definitions
+├── utils/            # Utility functions
+└── pages/            # Page components
+```
+
+### Component Design Principles
+- **Single Responsibility**: Each component has one clear purpose
+- **Composition over Inheritance**: Use composition patterns
+- **Props Interface**: Always define TypeScript interfaces for props
+- **Pure Functions**: Prefer pure components when possible
+- **Custom Hooks**: Extract reusable logic into custom hooks
+
+### State Management
+- **Local State**: Use `useState` for component-specific state
+- **Global State**: Zustand for app-wide state (user, workouts, settings)
+- **Server State**: React Query for API data with offline caching
+
+## Development Guidelines
+
+### Code Style
+- Use **functional components** with hooks
+- Prefer **arrow functions** for components
+- Use **destructuring** for props and state
+- Implement **error boundaries** for robust error handling
+- Write **unit tests** for critical components
+
+### Performance
+- Use **React.memo** for expensive components
+- Implement **lazy loading** for routes
+- Optimize **bundle size** with code splitting
+- Use **useCallback** and **useMemo** judiciously
+
+### Accessibility
+- Follow **WCAG 2.1** guidelines
+- Use semantic HTML elements
+- Implement keyboard navigation
+- Provide proper ARIA labels
+- Test with screen readers
+
+## Feature Requirements
+
+### Core Features
+1. **Workout Tracking**
+   - Create, edit, delete workouts
+   - Track exercises, sets, reps, weights
+   - Timer functionality
+   - Rest periods
+
+2. **Exercise Library**
+   - Browse exercises by category
+   - Search and filter exercises
+   - Custom exercise creation
+
+3. **Progress Tracking**
+   - Workout history
+   - Progress charts and analytics
+   - Personal records tracking
+
+4. **Offline Functionality**
+   - Full offline operation
+   - Data sync when online
+   - Conflict resolution
+
+### Data Models
+```typescript
+interface Workout {
+  id: string;
+  name: string;
+  date: Date;
+  exercises: Exercise[];
+  duration: number;
+  notes?: string;
+}
+
+interface Exercise {
+  id: string;
+  name: string;
+  category: string;
+  sets: Set[];
+}
+
+interface Set {
+  reps: number;
+  weight: number;
+  restTime: number;
+}
+```
+
+## Development Workflow
+
+### Setup Commands
+```bash
+# Initialize project
+npm create vite@latest r-track-workout -- --template react-ts
+cd r-track-workout
+
+# Install dependencies
+npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion
+npm install zustand @tanstack/react-query dexie
+npm install react-router-dom react-hook-form
+npm install -D @types/node
+```
+
+### File Naming Conventions
+- **Components**: PascalCase (e.g., `WorkoutCard.tsx`)
+- **Hooks**: camelCase with 'use' prefix (e.g., `useWorkout.ts`)
+- **Utilities**: camelCase (e.g., `formatDate.ts`)
+- **Types**: PascalCase (e.g., `WorkoutTypes.ts`)
+
+### Testing Strategy
+- **Unit Tests**: Jest + React Testing Library
+- **Integration Tests**: Component interaction testing
+- **E2E Tests**: Playwright for critical user flows
+
+## Deployment
+- **PWA** build for mobile app stores
+- **Vercel** or **Netlify** for web deployment
+- **Service Worker** for offline functionality
+- **Manifest.json** for app-like experience
+
+## Future Considerations
+- **Push Notifications** for workout reminders
+- **Social Features** for sharing progress
+- **AI Integration** for workout recommendations
+- **Wearable Integration** for automatic tracking
+description:mobile first react project-wide rules and instructions applied always
+globs:[]
+alwaysApply: true
+---
