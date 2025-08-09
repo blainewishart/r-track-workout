@@ -1,47 +1,48 @@
 # R-Track-Workout Project Guidelines
 
 ## Project Overview
-A React mobile-first workout tracking application with offline-first persistence and component-based architecture.
+A React Native mobile-first workout tracking application with offline-first persistence, designed specifically for Android deployment. The app features large, gym-friendly buttons and minimal text input for users who are out of breath, sweating, and distracted during workouts.
 
 ## Tech Stack Recommendations
 
 ### Core Framework
-- **React 18+** with TypeScript for type safety
-- **Vite** for fast development and building
-- **React Router** for navigation
-- **Zustand** for lightweight state management
+- **React Native** with Expo for cross-platform mobile development
+- **TypeScript** for type safety and better development experience
+- **Expo CLI** for development, building, and deployment
+- **React Context** for lightweight state management
 
-### UI Component Library
-- **Chakra UI** or **Mantine** - Modern, accessible, mobile-first component libraries
-- **Framer Motion** for smooth animations
-- **React Hook Form** for form handling
+### UI Components
+- **Pure React Native components** (no external UI libraries)
+- **React Native core components** (View, Text, TouchableOpacity, etc.)
+- **Custom styling** with StyleSheet API
+- **Responsive design** using flexbox and responsive dimensions
 
 ### Offline-First Persistence
-- **IndexedDB** via **idb** library for local storage
-- **Dexie.js** as a wrapper for easier IndexedDB usage
-- **React Query** for data synchronization when online
+- **AsyncStorage** for local data persistence on mobile devices
+- **React Native File System** for additional storage needs if required
+- **Data serialization** for complex object storage
 
 ### Mobile-First Development
-- **PWA** capabilities for app-like experience
-- **Service Workers** for offline functionality
-- **Responsive design** with mobile-first CSS approach
+- **Large touch targets** (minimum 44px for gym use)
+- **High contrast design** for gym lighting conditions
+- **One-handed operation** support
+- **Battery optimization** for extended gym sessions
 
 ## Architecture Guidelines
 
-### Component Structure
+### Component Structure (4 Main Components as Specified)
 ```
 src/
 ├── components/
-│   ├── ui/           # Reusable UI components
-│   ├── forms/        # Form components
-│   ├── layout/       # Layout components
-│   └── features/     # Feature-specific components
-├── hooks/            # Custom React hooks
-├── stores/           # Zustand stores
-├── services/         # Data and API services
-├── types/            # TypeScript type definitions
-├── utils/            # Utility functions
-└── pages/            # Page components
+│   ├── Header/        # Product name and status message
+│   ├── Moves/         # Exercise selection buttons
+│   ├── Keypad/        # Numeric input and actions
+│   └── Log/           # Workout log display
+├── context/           # React Context providers
+├── services/          # Data persistence services
+├── types/             # TypeScript type definitions
+├── utils/             # Utility functions
+└── screens/           # Screen components
 ```
 
 ### Component Design Principles
@@ -53,8 +54,8 @@ src/
 
 ### State Management
 - **Local State**: Use `useState` for component-specific state
-- **Global State**: Zustand for app-wide state (user, workouts, settings)
-- **Server State**: React Query for API data with offline caching
+- **Global State**: React Context for app-wide state (workout, moves, settings)
+- **Persistent State**: AsyncStorage for offline data storage
 
 ## Development Guidelines
 
@@ -67,63 +68,64 @@ src/
 
 ### Performance
 - Use **React.memo** for expensive components
-- Implement **lazy loading** for routes
-- Optimize **bundle size** with code splitting
+- Optimize **re-renders** with proper state management
 - Use **useCallback** and **useMemo** judiciously
+- Minimize **bundle size** for faster app loading
 
 ### Accessibility
-- Follow **WCAG 2.1** guidelines
-- Use semantic HTML elements
-- Implement keyboard navigation
-- Provide proper ARIA labels
+- Follow **mobile accessibility** guidelines
+- Use semantic React Native components
+- Implement proper touch targets (44px minimum)
+- Provide clear visual feedback
 - Test with screen readers
 
 ## Feature Requirements
 
-### Core Features
+### Core Features (Based on layout-and-use-cases.md)
 1. **Workout Tracking**
-   - Create, edit, delete workouts
+   - Create and track workouts in real-time
    - Track exercises, sets, reps, weights
-   - Timer functionality
-   - Rest periods
+   - Timer functionality for sets
+   - Workout completion
 
-2. **Exercise Library**
-   - Browse exercises by category
-   - Search and filter exercises
-   - Custom exercise creation
+2. **Exercise Selection**
+   - Predefined exercise buttons (bench press, pull up, squat, etc.)
+   - Large, easy-to-tap buttons
+   - Visual selection feedback
 
-3. **Progress Tracking**
-   - Workout history
-   - Progress charts and analytics
-   - Personal records tracking
+3. **Data Entry**
+   - Numeric keypad for weight and reps
+   - Clear input display
+   - Action buttons (Enter, Change Move, End Workout)
 
-4. **Offline Functionality**
+4. **Workout Log**
+   - Real-time log display
+   - Formatted workout data
+   - Scrollable text area
+
+5. **Offline Functionality**
    - Full offline operation
-   - Data sync when online
-   - Conflict resolution
+   - Local data persistence
+   - No internet connection required
 
-### Data Models
+### Data Models (From layout-and-use-cases.md)
 ```typescript
 interface Workout {
   id: string;
-  name: string;
-  date: Date;
-  exercises: Exercise[];
-  duration: number;
+  startTime: Date;
+  endTime?: Date;
   notes?: string;
-}
-
-interface Exercise {
-  id: string;
-  name: string;
-  category: string;
   sets: Set[];
 }
 
 interface Set {
-  reps: number;
+  id: string;
+  moveName: string;
   weight: number;
-  restTime: number;
+  reps: number[];
+  startTime: Date;
+  endTime?: Date;
+  notes?: string;
 }
 ```
 
@@ -131,40 +133,49 @@ interface Set {
 
 ### Setup Commands
 ```bash
-# Initialize project
-npm create vite@latest r-track-workout -- --template react-ts
+# Initialize React Native project with Expo
+npx create-expo-app@latest r-track-workout --template typescript
 cd r-track-workout
 
 # Install dependencies
-npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion
-npm install zustand @tanstack/react-query dexie
-npm install react-router-dom react-hook-form
-npm install -D @types/node
+npm install @react-native-async-storage/async-storage
+npm install react-native-testing-library jest-expo
+npm install -D @types/react @types/react-native
 ```
 
 ### File Naming Conventions
-- **Components**: PascalCase (e.g., `WorkoutCard.tsx`)
+- **Components**: PascalCase (e.g., `Header.tsx`)
 - **Hooks**: camelCase with 'use' prefix (e.g., `useWorkout.ts`)
 - **Utilities**: camelCase (e.g., `formatDate.ts`)
 - **Types**: PascalCase (e.g., `WorkoutTypes.ts`)
 
 ### Testing Strategy
-- **Unit Tests**: Jest + React Testing Library
-- **Integration Tests**: Component interaction testing
-- **E2E Tests**: Playwright for critical user flows
+- **Unit Tests**: Jest + React Native Testing Library
+- **Component Tests**: Individual component testing
+- **Integration Tests**: Workflow testing
 
-## Deployment
-- **PWA** build for mobile app stores
-- **Vercel** or **Netlify** for web deployment
-- **Service Worker** for offline functionality
-- **Manifest.json** for app-like experience
+## Android Deployment
+- **Expo Build Service** for APK generation
+- **Google Play Store** deployment
+- **App signing** and certificates
+- **Store listing** materials
+
+## Mobile-Specific Considerations
+- **Large touch targets** for gym use (44px minimum)
+- **High contrast** for poor lighting conditions
+- **Battery optimization** for extended use
+- **Offline-first** architecture
+- **Simple, intuitive** interface for distracted users
+- **One-handed operation** support
 
 ## Future Considerations
 - **Push Notifications** for workout reminders
-- **Social Features** for sharing progress
-- **AI Integration** for workout recommendations
-- **Wearable Integration** for automatic tracking
-description:mobile first react project-wide rules and instructions applied always
+- **Data export** for backup and analysis
+- **Custom exercises** addition
+- **Progress tracking** and statistics
+- **Wearable integration** for automatic tracking
+
+description:mobile first react native project-wide rules and instructions applied always
 globs:[]
 alwaysApply: true
 ---
