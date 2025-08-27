@@ -84,7 +84,7 @@ src/
 ## Usage
 
 1. **Start Workout**: Tap "Start Workout" to begin
-2. **Select Exercise**: Choose from the available moves
+2. **Select Move**: Choose from the available moves
 3. **Enter Weight**: Use the keypad to input weight
 4. **Enter Reps**: Add individual rep counts
 5. **View Log**: See your workout progress in real-time
