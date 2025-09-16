@@ -21,7 +21,7 @@ I will need help in learning how to specify the changes.
 In general:
     1. we will start with either an bug, a runtime error, an extended feature, a PR, or a new feature. I use the term 'issue' to refer to any of these. I will ask Claude to do the implementation as well as to write the 'issue' so that Claude can do the implementatioon and write the tests.
     2. Claude can do the implementatoon or the tests in any order. What matters is that a sandox is used to verigy tests. Where that is not possible, we need to clarify the specification, that is the 'issue' so that it is possible.
-    3. Occationaly, I may make quick changes to code, but only as a temporary measure. Once I see they work, I will ask Claude for help in getting the issue wirtten up properly in Englaish.
+    3. Occationaly, I may make quick changes to code, but only as a temporary measure. Once I see they work, I will ask Claude for help in getting the issue wirtten up properly in English.
     4. End state: Will be a systm completly specified in markdown files.
 </unit testing and development lifecycle>
 
