@@ -1,65 +1,134 @@
-
 # Project Overview
 A mobile-first workout tracker for logging strength training sessions, designed for extensibility and future analytics.
 
-# Development style
-In this project we use natural language (Engish )
-<project manageer>
+# Development Style
+In this project we use natural language (English) for specifications and requirements.
+
+<project manager>
 Blaine Wishart - Product Manager, Designer, Developer
-In project docs the pronoun 'I' alwasy refers to Blaine Wishart.
+In project docs the pronoun 'I' always refers to Blaine Wishart.
 </project manager>
+
 <agentic system>
-Is usually Claude Sonnet 4.0.
-Occcasiouall I will need long term planning and I will want to use GPT-4 for that.
-Often, Sonnet 3.5 will be fine. 
-I am currently unclear about how to instruct the to switch between models. I would appreciate clarity on that.
-I will often use the term 'Claude' without specifying sonet 3.5, sonnet 4.0 or Opus 4.0 in this document. I'm not sure how to specify which model I want to use. Suggestions are welcome.
+Primary: Claude Sonnet 4.0 for implementation and analysis
+Planning: Opus 4.0 for long-term planning and architecture decisions
+Fallback: Sonnet 3.5 for routine tasks
+
+Model selection approach:
+- For complex architectural analysis: explicitly request Opus 4.0
+- For implementation and coding: Sonnet 4.0 (default)
+- For simple tasks: any available model
+
+I will often use the term 'Claude' without specifying model version in this document. The context and task complexity should guide model selection.
 </agentic system>
+
 <unit testing and development lifecycle>
-I expect expermentation will be required to get the combination of lifecycle, natural language coding, agentic systems and unit testing to work well together.
-I will need help in learning how to specify the changes.
-In general:
-    1. we will start with either an bug, a runtime error, an extended feature, a PR, or a new feature. I use the term 'issue' to refer to any of these. I will ask Claude to do the implementation as well as to write the 'issue' so that Claude can do the implementatioon and write the tests.
-    2. Claude can do the implementatoon or the tests in any order. What matters is that a sandox is used to verigy tests. Where that is not possible, we need to clarify the specification, that is the 'issue' so that it is possible.
-    3. Occationaly, I may make quick changes to code, but only as a temporary measure. Once I see they work, I will ask Claude for help in getting the issue wirtten up properly in English.
-    4. End state: Will be a systm completly specified in markdown files.
+Experimentation required to optimize the combination of lifecycle, natural language coding, agentic systems and unit testing.
+
+Process:
+1. Start with an issue: bug, runtime error, feature extension, PR, or new feature
+2. Claude implements AND writes tests (order flexible based on task)
+3. Use sandbox verification where possible; clarify specifications when not
+4. Temporary manual changes acceptable, but formalize through Claude afterward
+5. End state: System completely specified in markdown files
 </unit testing and development lifecycle>
 
+# Architecture Decisions
 
-# Alpha Release Scope
-- Four components: Header, Moves, Keypad, Log
-- Minimal global state: move name (string), move weight (number), move reps (array)
-- Each component initially displays only its name
-- Alpha release will be a big ball of mud. Everything will be in one file, App.tsx. and we will not need separate branches. 
-- While the components will be minimal, they must be structurally React components.
+## Component Communication (Alpha Lessons Learned)
+**Decision:** Props drilling for shared state management
+- **Rationale:** Simplicity for alpha release; easy to understand and debug
+- **Implementation:** WorkoutState interface with state and setters passed to all components
+- **Future:** Consider React Context or custom hooks for MVP phase
+
+## State Management
+**Current:** Three-piece shared state in App.tsx
+- `moveName` (string): Selected exercise
+- `moveWeight` (number): Current weight setting
+- `moveReps` (number[]): Array of rep counts per set
+
+**Pattern:** "Bulletin board" - single source of truth accessible by all components
+
+# Alpha Release Status ✅ COMPLETED
+- [x] Four functional React components: Header, Moves, Keypad, Log
+- [x] Shared state communication via props drilling
+- [x] Interactive controls for move selection, weight adjustment, rep tracking
+- [x] Visual state feedback across all components
+- [x] Mobile-first responsive styling
+- [x] Clean dependency resolution (removed webpack config conflict)
+- [x] Expo development server functional
+
+**Key Achievement:** Proved component communication architecture works
 
 # Setup Instructions
 1. Install Node.js (v18 or v20 recommended)
-2. Install Expo CLI: `npm install -g expo-cli`
-3. Install dependencies: `npm install`
-4. Start the app: `npx expo start`
-5. Run on device: Scan QR code with Expo Go
+2. Install dependencies: `npm install`
+3. Start development server: `npx expo start`
+4. Test on device: Scan QR code with Expo Go app
 
+## Version Requirements
+- **Expo SDK:** 54.0.0
+- **Expo Go App:** Version 54+ (on device)
+- **React:** 19.1.0
+- **React Native:** 0.81.4
 
-# Component Responsibilities
-- **Header:** Branding and status
-- **Moves:** List of available exercises
-- **Keypad:** Input for weight and reps
-- **Log:** Display workout entries
+**Note:** Expo CLI global install no longer required. Ensure your device's Expo Go app matches the project's Expo SDK version.
 
-# State and Data Flow
-- All components read/write to a shared state object in App.tsx
+# Component Implementation
 
-# MVP
--we will not define an MVP until after the alpha release and after some real world use.
+## Current Responsibilities
+- **Header:** Status display ("Current: [move] [weight]kg" or "Ready to start")
+- **Moves:** Exercise selection with visual feedback (Squat, Bench Press, Deadlift)
+- **Keypad:** Weight controls (±5kg buttons) and rep management (Add 8, Clear)
+- **Log:** Display last set ("Last: [move] [weight]kg x [reps]" or "No entries yet")
 
-# Contribution Guidelines 
-- after alpha release only
-- Create a new branch for each component
-- Keep changes minimal and focused
-- Submit pull requests for review
+## Data Flow Pattern
+All components receive WorkoutState props containing:
+- State values: moveName, moveWeight, moveReps
+- State setters: setMoveName, setMoveWeight, setMoveReps
 
-# Known Issues / Next Steps
-- Dependency conflicts with Expo versions
-- Need to define data model for future analytics
-    
+Pattern ensures single source of truth with predictable data flow.
+
+# MVP Planning
+**Status:** To be defined after alpha real-world testing
+
+**Next Phase Considerations:**
+- Refactor from "big ball of mud" to organized component structure
+- Enhanced state management (Context API or state management library)
+- Persistent storage for workout history
+- Additional exercise types and customization
+- Data export functionality
+
+# Development Process Learnings
+
+## Git Workflow
+- Commit functional milestones with descriptive messages
+- Include Claude Code attribution in commits
+- Maintain clean working tree between major changes
+
+## Dependency Management
+- Remove conflicting packages proactively
+- Clean install after package.json changes
+- Monitor Expo compatibility warnings
+
+## Component Architecture
+- Start with minimal implementation
+- Prove communication patterns work
+- Extend functionality incrementally
+- Prioritize user testing over premature optimization
+
+# Known Issues / Resolved
+- ✅ Dependency conflicts with Expo versions (resolved: removed webpack config)
+- ✅ Component isolation (resolved: implemented props drilling)
+- 📋 AsyncStorage version mismatch warning (non-blocking)
+
+# Commands Reference
+```bash
+npm install              # Install dependencies
+npx expo start          # Start development server
+git add . && git commit # Commit changes (with proper message)
+```
+
+# Next Steps
+
+Refactor the big ball of mud into 4 separate components that share data in the bulletin board, but can evolve separately from each other.
