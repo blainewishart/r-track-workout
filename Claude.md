@@ -35,6 +35,20 @@ Process:
 
 # Architecture Decisions
 
+## Development Toolchain Philosophy (Post-Alpha Decision)
+**Decision:** Unix-inspired MCP (Model Context Protocol) toolchain
+- **Philosophy:** "Tools with minimal surface area, one clear task each, enhancing LLM-based terminal development"
+- **Approach:** MCP all the way down - avoid complex tool interactions
+- **Inspiration:** Unix design principles applied to AI-assisted development
+- **Benefits:** Clean separation of concerns, composable functionality, maintainable complexity
+
+**Implementation Strategy:**
+- Each tool does one thing well
+- Tools communicate via MCP protocol
+- Claude orchestrates tool composition
+- Lightweight editors focused on editing only
+- MCP servers handle specialized tasks (file ops, markdown processing, spell check, etc.)
+
 ## Component Communication (Alpha Lessons Learned)
 **Decision:** Props drilling for shared state management
 - **Rationale:** Simplicity for alpha release; easy to understand and debug
